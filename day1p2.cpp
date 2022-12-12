@@ -1,6 +1,10 @@
 import <iostream>;
 import <optional>;
 import <string>;
+import <algorithm>;
+import <numeric>;
+import <ranges>;
+import <vector>;
 
 std::optional<int> get_next_elf(std::istream& stream)
 {
@@ -17,10 +21,12 @@ std::optional<int> get_next_elf(std::istream& stream)
 
 int main()
 {
-    int most_calories = 0;
+    std::vector<int> carried_calories;
     while (auto calories = get_next_elf(std::cin)) {
-        most_calories = std::max(*calories, most_calories);
+        carried_calories.push_back(*calories);
     }
-    std::cout << most_calories << std::endl;
+    std::sort(carried_calories.begin(), carried_calories.end(), std::greater<int>());
+    auto top_3 = std::views::counted(carried_calories.begin(), 3);
+    std::cout << std::accumulate(top_3.begin(), top_3.end(), 0) << std::endl;
     return 0;
 }
